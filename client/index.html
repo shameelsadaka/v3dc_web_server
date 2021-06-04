@@ -1,0 +1,22 @@
+<!-- ./client/index.html -->
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Document</title>
+  </head>
+  <body>
+    <button onClick="sendMsg()">Hit Me</button>
+
+    <script src="https://cdn.socket.io/4.1.1/socket.io.min.js" integrity="sha384-cdrFIqe3RasCMNE0jeFG9xJHog/tgOVC1E9Lzve8LQN1g5WUHo0Kvk1mawWjxX7a" crossorigin="anonymous"></script>
+    <script>
+      const socket = io("http://localhost:9987");
+
+      function sendMsg() {
+        socket.emit("message", "HELLO WORLD");
+      }
+    </script>
+  </body>
+</html>
