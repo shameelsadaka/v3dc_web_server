@@ -32,6 +32,7 @@ io.on("connection", function(socket) {
         classroom.handleInit(socket, data, onInit)
     )
     socket.on("movement",(movement:MovementType,position:Coordinates)=>classroom.handleMovement(socket,movement,position))
+    socket.on("lookingAt",(lookingAt:[number,number,number])=>classroom.handleRotation(socket,lookingAt));
 
     socket.on("disconnect", ()=>classroom.handleDisconnect(socket))
 });

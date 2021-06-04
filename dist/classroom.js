@@ -25,6 +25,10 @@ var Classroom = /** @class */ (function () {
         this.users[socket.id].position = position;
         socket.broadcast.emit('movement', this.users[socket.id].uuid, movement, position);
     };
+    Classroom.prototype.handleRotation = function (socket, lookingAt) {
+        this.users[socket.id].lookingAt = lookingAt;
+        socket.broadcast.emit('lookingAt', this.users[socket.id].uuid, lookingAt);
+    };
     Classroom.prototype.handleDisconnect = function (socket) {
         console.log("User " + this.users[socket.id].username + " with socket id " + socket.id + " exited");
         socket.broadcast.emit('user-exit', this.users[socket.id].uuid);

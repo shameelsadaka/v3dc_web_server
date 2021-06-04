@@ -38,6 +38,10 @@ export default class Classroom{
         
         socket.broadcast.emit('movement', this.users[socket.id].uuid, movement, position);
     }
+    handleRotation(socket:Socket, lookingAt:[number,number,number]){
+        this.users[socket.id].lookingAt = lookingAt;
+        socket.broadcast.emit('lookingAt', this.users[socket.id].uuid, lookingAt);
+    }
 
     handleDisconnect(socket:Socket){
         console.log(`User ${this.users[socket.id].username} with socket id ${socket.id} exited`)

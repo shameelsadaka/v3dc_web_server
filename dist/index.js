@@ -24,6 +24,7 @@ io.on("connection", function (socket) {
         return classroom.handleInit(socket, data, onInit);
     });
     socket.on("movement", function (movement, position) { return classroom.handleMovement(socket, movement, position); });
+    socket.on("lookingAt", function (lookingAt) { return classroom.handleRotation(socket, lookingAt); });
     socket.on("disconnect", function () { return classroom.handleDisconnect(socket); });
 });
 app.get("/", function (request, response) {
