@@ -28,7 +28,7 @@ io.on("connection", function(socket) {
     classroom.addUser(socket);
     
     socket.on("init",
-        (data:{uuid:string, username:string,color:string}, onInit:VoidFunction)=>
+        (data:{uuid:string, username:string}, onInit:VoidFunction)=>
         classroom.handleInit(socket, data, onInit)
     )
     socket.on("movement",(movement:MovementType,position:Coordinates)=>classroom.handleMovement(socket,movement,position))

@@ -1,5 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+var helpers_1 = require("./helpers");
 var User_1 = require("./modules/User");
 var Classroom = /** @class */ (function () {
     function Classroom() {
@@ -13,14 +14,13 @@ var Classroom = /** @class */ (function () {
         var user = this.users[socket.id];
         user.uuid = data.uuid;
         user.username = data.username;
-        user.color = data.color;
+        user.color = helpers_1.getRandomColor();
         user.isInitialized = true;
         console.log("New User " + data.username + " Joined");
-        onInit({ otherUsers: Object.values(this.users).filter(function (u) { return u.socket.id != socket.id; }).map(function (u) { return u.toBasicData(); }) });
+        onInit({ color: user.color, otherUsers: Object.values(this.users).filter(function (u) { return u.socket.id != socket.id; }).map(function (u) { return u.toBasicData(); }) });
         socket.broadcast.emit('new-user', user.toBasicData());
     };
     Classroom.prototype.handleMovement = function (socket, movement, position) {
-        console.log(movement);
         this.users[socket.id].movement = movement;
         this.users[socket.id].position = position;
         socket.broadcast.emit('movement', this.users[socket.id].uuid, movement, position);

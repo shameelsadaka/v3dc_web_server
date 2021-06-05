@@ -1,4 +1,5 @@
 import { Socket } from "socket.io";
+import { getRandomColor } from "./helpers";
 import { Coordinates, MovementType, User, UserBasicData } from "./modules/User";
 
 
@@ -15,24 +16,23 @@ export default class Classroom{
     }
     handleInit(
             socket:Socket,
-            data:{uuid:string, username:string, color:string},
-            onInit: (data:{otherUsers:UserBasicData[]})=>void
+            data:{uuid:string, username:string},
+            onInit: (data:{color: string, otherUsers:UserBasicData[]})=>void
         ){
         const user = this.users[socket.id];
 
         user.uuid = data.uuid;
         user.username = data.username;
-        user.color = data.color;
+        user.color = getRandomColor();
         user.isInitialized = true;
         
         console.log(`New User ${data.username} Joined`)
 
-        onInit({otherUsers: Object.values(this.users).filter(u=>u.socket.id != socket.id).map(u=>u.toBasicData())});
+        onInit({color: user.color , otherUsers: Object.values(this.users).filter(u=>u.socket.id != socket.id).map(u=>u.toBasicData())});
 
         socket.broadcast.emit('new-user', user.toBasicData())
     }
     handleMovement(socket:Socket,movement:MovementType,position:Coordinates){
-        console.log(movement)
         this.users[socket.id].movement = movement;
         this.users[socket.id].position = position;
         
