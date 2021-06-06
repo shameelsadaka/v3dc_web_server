@@ -24,7 +24,7 @@ var Classroom = /** @class */ (function () {
     Classroom.prototype.handleMovement = function (socket, isMovingForward, position) {
         this.users[socket.id].isMovingForward = isMovingForward;
         this.users[socket.id].position = position;
-        socket.broadcast.emit('movement', this.users[socket.id].uuid, isMovingForward, position);
+        socket.broadcast.emit('movement', this.users[socket.id].uuid, isMovingForward);
     };
     Classroom.prototype.handleRotation = function (socket, lookingAt) {
         this.users[socket.id].lookingAt = lookingAt;

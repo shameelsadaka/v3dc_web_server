@@ -36,7 +36,7 @@ export default class Classroom{
         this.users[socket.id].isMovingForward = isMovingForward;
         this.users[socket.id].position = position;
         
-        socket.broadcast.emit('movement', this.users[socket.id].uuid, isMovingForward, position);
+        socket.broadcast.emit('movement', this.users[socket.id].uuid, isMovingForward);
     }
     handleRotation(socket:Socket, lookingAt:[number,number,number]){
         this.users[socket.id].lookingAt = lookingAt;
