@@ -7,7 +7,7 @@ var express_1 = __importDefault(require("express"));
 var socket_io_1 = __importDefault(require("socket.io"));
 var http_1 = __importDefault(require("http"));
 var classroom_1 = __importDefault(require("./classroom"));
-var PORT = process.env.PORT || 3500;
+var PORT = process.env.PORT || 80;
 var app = express_1.default();
 app.set("port", PORT);
 app.use(express_1.default.static('client'));
