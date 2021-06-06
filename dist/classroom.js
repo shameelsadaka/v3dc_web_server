@@ -34,6 +34,11 @@ var Classroom = /** @class */ (function () {
         this.users[socket.id].isSitting = isSitting;
         socket.broadcast.emit('isSitting', this.users[socket.id].uuid, isSitting);
     };
+    Classroom.prototype.hanleStateCorrection = function (socket, position, lookingAt) {
+        this.users[socket.id].position = { x: position[0], y: position[1], z: position[2] };
+        this.users[socket.id].lookingAt = lookingAt;
+        socket.broadcast.emit('state-correction', this.users[socket.id].uuid, position, lookingAt);
+    };
     Classroom.prototype.handleDisconnect = function (socket) {
         console.log("User " + this.users[socket.id].username + " with socket id " + socket.id + " exited");
         socket.broadcast.emit('user-exit', this.users[socket.id].uuid);

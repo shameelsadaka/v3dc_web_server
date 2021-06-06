@@ -46,6 +46,11 @@ export default class Classroom{
         this.users[socket.id].isSitting = isSitting;
         socket.broadcast.emit('isSitting', this.users[socket.id].uuid, isSitting);        
     }
+    hanleStateCorrection(socket:Socket, position:[number,number,number], lookingAt:[number,number,number]){
+        this.users[socket.id].position = {x:position[0], y:position[1], z: position[2]};
+        this.users[socket.id].lookingAt = lookingAt;
+        socket.broadcast.emit('state-correction', this.users[socket.id].uuid, position, lookingAt);        
+    }
 
     handleDisconnect(socket:Socket){
         console.log(`User ${this.users[socket.id].username} with socket id ${socket.id} exited`)
