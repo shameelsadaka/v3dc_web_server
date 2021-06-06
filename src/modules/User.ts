@@ -1,11 +1,5 @@
 import { Socket } from "socket.io"
 
-export type MovementType = {
-    forward: boolean,
-    backward: boolean,
-    left: boolean,
-    right: boolean,
-}
 export type Coordinates = {
     x:number,
     y:number,
@@ -18,8 +12,9 @@ export type UserBasicData = {
     username:string
     color:string
     position: Coordinates
-    movement : MovementType
+    isMovingForward: boolean,
     lookingAt: [number,number,number]
+    isSitting: boolean
 }
 export class User{
     socket:Socket
@@ -29,14 +24,10 @@ export class User{
     username?:string
     color?:string
     lookingAt: [number,number,number] = [0,0,0]
+    isSitting: boolean = false
     
     position: Coordinates = {x:0,y:0,z:0};
-    movement:MovementType = {
-		forward: false,
-		backward: false,
-		left: false,
-		right: false,
-	}
+    isMovingForward:boolean = false
     constructor(socket:Socket){
         this.socket=socket;
     }
@@ -48,7 +39,8 @@ export class User{
             username: this.username as string,
             color: this.color as string,
             position: this.position,
-            movement : this.movement,    
+            isMovingForward : this.isMovingForward,    
+            isSitting: this.isSitting,
             lookingAt: this.lookingAt
         }
     }

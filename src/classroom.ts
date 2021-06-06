@@ -1,6 +1,6 @@
 import { Socket } from "socket.io";
 import { getRandomColor } from "./helpers";
-import { Coordinates, MovementType, User, UserBasicData } from "./modules/User";
+import { Coordinates, User, UserBasicData } from "./modules/User";
 
 
 export default class Classroom{
@@ -16,11 +16,11 @@ export default class Classroom{
     }
     handleInit(
             socket:Socket,
-            data:{uuid:string, username:string},
+            data:{uuid:string, username:string, initialPosition:[number,number,number]},
             onInit: (data:{color: string, otherUsers:UserBasicData[]})=>void
         ){
         const user = this.users[socket.id];
-
+        user.position = {x:data.initialPosition[0],y:data.initialPosition[1],z:data.initialPosition[2]}
         user.uuid = data.uuid;
         user.username = data.username;
         user.color = getRandomColor();
@@ -32,15 +32,19 @@ export default class Classroom{
 
         socket.broadcast.emit('new-user', user.toBasicData())
     }
-    handleMovement(socket:Socket,movement:MovementType,position:Coordinates){
-        this.users[socket.id].movement = movement;
+    handleMovement(socket:Socket,isMovingForward:boolean,position:Coordinates){
+        this.users[socket.id].isMovingForward = isMovingForward;
         this.users[socket.id].position = position;
         
-        socket.broadcast.emit('movement', this.users[socket.id].uuid, movement, position);
+        socket.broadcast.emit('movement', this.users[socket.id].uuid, isMovingForward, position);
     }
     handleRotation(socket:Socket, lookingAt:[number,number,number]){
         this.users[socket.id].lookingAt = lookingAt;
         socket.broadcast.emit('lookingAt', this.users[socket.id].uuid, lookingAt);
+    }
+    handleIsSitting(socket:Socket, isSitting: boolean){
+        this.users[socket.id].isSitting = isSitting;
+        socket.broadcast.emit('isSitting', this.users[socket.id].uuid, isSitting);        
     }
 
     handleDisconnect(socket:Socket){

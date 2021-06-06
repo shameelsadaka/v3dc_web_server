@@ -5,13 +5,9 @@ var User = /** @class */ (function () {
     function User(socket) {
         this.isInitialized = false;
         this.lookingAt = [0, 0, 0];
+        this.isSitting = false;
         this.position = { x: 0, y: 0, z: 0 };
-        this.movement = {
-            forward: false,
-            backward: false,
-            left: false,
-            right: false,
-        };
+        this.isMovingForward = false;
         this.socket = socket;
     }
     User.prototype.toBasicData = function () {
@@ -21,7 +17,8 @@ var User = /** @class */ (function () {
             username: this.username,
             color: this.color,
             position: this.position,
-            movement: this.movement,
+            isMovingForward: this.isMovingForward,
+            isSitting: this.isSitting,
             lookingAt: this.lookingAt
         };
     };

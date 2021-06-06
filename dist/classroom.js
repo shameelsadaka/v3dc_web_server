@@ -12,6 +12,7 @@ var Classroom = /** @class */ (function () {
     };
     Classroom.prototype.handleInit = function (socket, data, onInit) {
         var user = this.users[socket.id];
+        user.position = { x: data.initialPosition[0], y: data.initialPosition[1], z: data.initialPosition[2] };
         user.uuid = data.uuid;
         user.username = data.username;
         user.color = helpers_1.getRandomColor();
@@ -20,14 +21,18 @@ var Classroom = /** @class */ (function () {
         onInit({ color: user.color, otherUsers: Object.values(this.users).filter(function (u) { return u.socket.id != socket.id; }).map(function (u) { return u.toBasicData(); }) });
         socket.broadcast.emit('new-user', user.toBasicData());
     };
-    Classroom.prototype.handleMovement = function (socket, movement, position) {
-        this.users[socket.id].movement = movement;
+    Classroom.prototype.handleMovement = function (socket, isMovingForward, position) {
+        this.users[socket.id].isMovingForward = isMovingForward;
         this.users[socket.id].position = position;
-        socket.broadcast.emit('movement', this.users[socket.id].uuid, movement, position);
+        socket.broadcast.emit('movement', this.users[socket.id].uuid, isMovingForward, position);
     };
     Classroom.prototype.handleRotation = function (socket, lookingAt) {
         this.users[socket.id].lookingAt = lookingAt;
         socket.broadcast.emit('lookingAt', this.users[socket.id].uuid, lookingAt);
+    };
+    Classroom.prototype.handleIsSitting = function (socket, isSitting) {
+        this.users[socket.id].isSitting = isSitting;
+        socket.broadcast.emit('isSitting', this.users[socket.id].uuid, isSitting);
     };
     Classroom.prototype.handleDisconnect = function (socket) {
         console.log("User " + this.users[socket.id].username + " with socket id " + socket.id + " exited");

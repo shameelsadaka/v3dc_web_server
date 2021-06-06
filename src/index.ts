@@ -3,19 +3,20 @@ import socketio from "socket.io";
 import http from "http";
 
 import Classroom from './classroom';
-import { MovementType, Coordinates } from "./modules/User";
+import { Coordinates } from "./modules/User";
 
 
-const PORT = process.env.PORT || 9987;
+const PORT = process.env.PORT || 3500;
 
 
 const app = express();
 app.set("port", PORT);
+app.use(express.static('client'))
 
 const server = new http.Server(app);
 let io = new socketio.Server(server,{
     cors: {
-        origin: "http://localhost:8080",
+        origin: "*",
         methods: ["GET", "POST"]
     }
 });
@@ -28,18 +29,19 @@ io.on("connection", function(socket) {
     classroom.addUser(socket);
     
     socket.on("init",
-        (data:{uuid:string, username:string}, onInit:VoidFunction)=>
+        (data:{uuid:string, username:string, initialPosition:[number,number,number]}, onInit:VoidFunction)=>
         classroom.handleInit(socket, data, onInit)
     )
-    socket.on("movement",(movement:MovementType,position:Coordinates)=>classroom.handleMovement(socket,movement,position))
+    socket.on("movement",(isMovingForward:boolean,position:Coordinates)=>classroom.handleMovement(socket,isMovingForward,position))
     socket.on("lookingAt",(lookingAt:[number,number,number])=>classroom.handleRotation(socket,lookingAt));
+    socket.on("isSitting",(isSitting:boolean)=>classroom.handleIsSitting(socket,isSitting));
 
     socket.on("disconnect", ()=>classroom.handleDisconnect(socket))
 });
 
-app.get("/", (request,response) => {
-    return response.send('Hello');
-});
+app.get('/*', (req, res) => {
+    res.sendFile(__dirname + '/client/index.html');
+  })
 
 
 server.listen(PORT, () => console.log(`listening on port ${PORT}`));
