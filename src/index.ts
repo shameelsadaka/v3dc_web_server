@@ -36,6 +36,10 @@ io.on("connection", function(socket) {
     socket.on("lookingAt",(lookingAt:[number,number,number])=>classroom.handleRotation(socket,lookingAt));
     socket.on("isSitting",(isSitting:boolean)=>classroom.handleIsSitting(socket,isSitting));
 
+
+    socket.on("update-links",(links:string)=>{io.emit('update-links',links)});
+    socket.on("update-active-link",(activeLink:number)=>{io.emit('update-active-link',activeLink)});
+
     socket.on("state-correction",(position:[number,number,number], lookingAt:[number,number,number])=>classroom.hanleStateCorrection(socket, position, lookingAt));
 
     socket.on("disconnect", ()=>classroom.handleDisconnect(socket))
